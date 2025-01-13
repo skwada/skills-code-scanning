@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Xml.Linq;
 
 namespace SampleLibrary
 {
@@ -28,7 +29,7 @@ namespace SampleLibrary
         /// <param name="name">顧客の名前。</param>
         /// <param name="address">顧客の住所。</param>
         /// <param name="phone">顧客の電話番号。</param>
-        public void CreateCustomer(int code, string name, string address, string phone)
+        public void CreateCustomer(string code, string name, string address, string phone)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -49,13 +50,13 @@ namespace SampleLibrary
         /// </summary>
         /// <param name="code">顧客のコード。</param>
         /// <returns>顧客情報を含む DataTable。</returns>
-        public DataTable ReadCustomer(int code)
+        public DataTable ReadCustomer(string code)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string query = "SELECT * FROM tbCustomer WHERE Code = @Code";
+                string query = "SELECT * FROM tbCustomer WHERE Code = '" + code + "'";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Code", code);
+                command.CommandType = CommandType.Text;
 
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
                 DataTable customerTable = new DataTable();
@@ -72,7 +73,7 @@ namespace SampleLibrary
         /// <param name="name">顧客の名前。</param>
         /// <param name="address">顧客の住所。</param>
         /// <param name="phone">顧客の電話番号。</param>
-        public void UpdateCustomer(int code, string name, string address, string phone)
+        public void UpdateCustomer(string code, string name, string address, string phone)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -92,13 +93,13 @@ namespace SampleLibrary
         /// 指定されたコードの顧客情報を削除します。
         /// </summary>
         /// <param name="code">顧客のコード。</param>
-        public void DeleteCustomer(int code)
+        public void DeleteCustomer(string code)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string query = "DELETE FROM tbCustomer WHERE Code = @Code";
+                string query = "DELETE FROM tbCustomer WHERE Code  = '" + code + "'";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Code", code);
+                command.CommandType = CommandType.Text;
 
                 connection.Open();
                 command.ExecuteNonQuery();
