@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web;
 using System.Xml.Linq;
 
 namespace SampleLibrary
@@ -65,6 +66,29 @@ namespace SampleLibrary
                 return customerTable;
             }
         }
+
+        /// <summary>
+        /// 指定されたコードの顧客情報を取得します。
+        /// </summary>
+        /// <param name="code">顧客のコード。</param>
+        /// <returns>顧客情報を含む DataTable。</returns>
+        public DataTable ReadCustomer(HttpContext httpContext)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string code = httpContext.Request.QueryString["code"];
+                string query = "SELECT * FROM tbCustomer WHERE Code = '" + code + "'";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.CommandType = CommandType.Text;
+
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+                DataTable customerTable = new DataTable();
+                adapter.Fill(customerTable);
+
+                return customerTable;
+            }
+        }
+
 
         /// <summary>
         /// 指定されたコードの顧客情報を更新します。
