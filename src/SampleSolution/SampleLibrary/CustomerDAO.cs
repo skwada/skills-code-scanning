@@ -53,7 +53,7 @@ namespace SampleLibrary
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string query = "SELECT * FROM tbCustomer WHERE Code = @Code";
+                string query = $"SELECT * FROM tbCustomer WHERE Code == {code}";
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Code", code);
 
